@@ -37,7 +37,7 @@ The main focus of this project is not on the accuracy of classification but on g
 
     ```bash
     git clone https://github.com/kalash-2000/hiring_prediction.git
-    cd salary-prediction
+    cd hiring-prediction
     ```
 
 2. **Create a virtual environment and activate it:**
