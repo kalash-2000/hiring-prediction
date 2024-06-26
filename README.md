@@ -36,7 +36,7 @@ The main focus of this project is not on the accuracy of classification but on g
 1. **Clone the repository:**
 
     ```bash
-    git clone https://github.com/kalash-2000/salary-prediction.git
+    git clone https://github.com/kalash-2000/hiring_prediction.git
     cd salary-prediction
     ```
 
@@ -56,7 +56,7 @@ The main focus of this project is not on the accuracy of classification but on g
 ## Usage
 
 1. **Exploratory Data Analysis and Model Creation:**
-    - Open `EDA.ipynb` in Jupyter Notebook.
+    - Open `hiring_decision.ipynb` in Jupyter Notebook.
     - Follow the steps in the notebook to perform EDA and train the model.
 
 2. **Running the Application Locally:**
