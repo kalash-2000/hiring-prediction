@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Salary Prediction</title>
+    <title>Hiring Decision Form</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -15,11 +15,30 @@
             margin: 0;
         }
         .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
             background: #001167;
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            text-align: center;
+            text-align: left;
+            max-width: 900px;
+            width: 100%;
+            overflow-y: auto; /* Enable vertical scrollbar */
+            max-height: 80vh; /* Set maximum height to 80% of viewport height */
+        }
+        .form-container {
+            flex: 1;
+            margin-right: 20px;
+        }
+        .result-container {
+            flex: 1;
+            padding: 20px;
+            background: #002c5c;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: left;
         }
         h1 {
             margin-bottom: 20px;
@@ -28,7 +47,7 @@
             display: block;
             margin: 10px 0 5px;
         }
-        input[type="number"], select {
+        input[type="number"], input[type="text"], select {
             width: calc(100% - 22px);
             padding: 10px;
             margin-bottom: 20px;
@@ -44,53 +63,100 @@
             border-radius: 5px;
             cursor: pointer;
             font-size: 16px;
-            transition: background 1s ease;
+            transition: background 0.3s ease;
         }
         input[type="submit"]:hover {
             background: #6a11cb;
         }
-        .prediction {
+        .result {
             margin-top: 20px;
             font-size: 18px;
+            color: #fff;
+        }
+        .result h2 {
+            margin-bottom: 10px;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Salary Prediction Form</h1>
-        <form action="{{ url_for('predict') }}" method="post">
-            <label for="employmentstatus_Independent">Employment Status Independent:</label>
-            <select id="employmentstatus_Independent" name="employmentstatus_Independent" required>
-                <option value="1">Yes</option>
-                <option value="0">No</option>
-            </select><br>
+        <div class="form-container">
+            <h1>Hiring Decision Form</h1>
+            <form action="{{ url_for('predict') }}" method="post">
+                <div class="slider-container">
+                    <label class="slider-label" for="age">Age: <span id="ageValue">30</span></label>
+                    <input type="range" id="age" name="age" min="20" max="50" value="30" class="slider" oninput="updateAgeValue(this.value)">
+                </div>
 
-            <label for="databaseservers">Database Servers:</label>
-            <input type="number" id="databaseservers" name="databaseservers" required><br>
+                <label for="gender">Gender:</label>
+                <select id="gender" name="gender" required>
+                    <option value="1">Male</option>
+                    <option value="0">Female</option>
+                </select>
 
-            <label for="managestaff_Yes">Manage Staff Yes:</label>
-            <select id="managestaff_Yes" name="managestaff_Yes" required>
-                <option value="1">Yes</option>
-                <option value="0">No</option>
-            </select><br>
+                <label for="educationLevel">Education Level:</label>
+                <select id="educationLevel" name="educationLevel" required>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                </select>
 
-            <label for="yearswiththistypeofjob">Years with this Type of Job:</label>
-            <input type="number" id="yearswiththistypeofjob" name="yearswiththistypeofjob" required><br>
+                <label for="experienceYears">Experience Years:</label>
+                <input type="number" id="experienceYears" name="experienceYears" required>
 
-            <label for="jobtitle_Architect">Job Title Architect:</label>
-            <select id="jobtitle_Architect" name="jobtitle_Architect" required>
-                <option value="1">Yes</option>
-                <option value="0">No</option>
-            </select><br>
+                <label for="previousCompanies">Previous Companies:</label>
+                <input type="number" id="previousCompanies" name="previousCompanies" required>
 
-            <input type="submit" value="Submit">
-        </form>
+                <label for="distanceFromCompany">Distance from Company (km):</label>
+                <input type="number" id="distanceFromCompany" name="distanceFromCompany" required>
 
-        {% if prediction_text %}
-        <div class="prediction">
-            <h2>{{ prediction_text }}</h2>
+                <label for="interviewScore">Interview Score:</label>
+                <input type="number" id="interviewScore" name="interviewScore" required>
+
+                <label for="skillScore">Skill Score:</label>
+                <input type="number" id="skillScore" name="skillScore" required>
+
+                <label for="personalityScore">Personality Score:</label>
+                <input type="number" id="personalityScore" name="personalityScore" required>
+
+                <label for="recruitmentStrategy">Recruitment Strategy:</label>
+                <select id="recruitmentStrategy" name="recruitmentStrategy" required>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                </select>
+
+                <input type="submit" value="Submit">
+            </form>
         </div>
-        {% endif %}
+
+        <div class="result-container">
+            {% if prediction_text %}
+            <div class="result">
+                <h2>Result</h2>
+                <p><strong>Age:</strong> {{ request.form.age }}</p>
+                <p><strong>Gender:</strong> {% if request.form.gender == '1' %} Male {% else %} Female {% endif %}</p>
+                <p><strong>Education Level:</strong> {{ request.form.educationLevel }}</p>
+                <p><strong>Experience Years:</strong> {{ request.form.experienceYears }}</p>
+                <p><strong>Previous Companies:</strong> {{ request.form.previousCompanies }}</p>
+                <p><strong>Distance from Company:</strong> {{ request.form.distanceFromCompany }} km</p>
+                <p><strong>Interview Score:</strong> {{ request.form.interviewScore }}</p>
+                <p><strong>Skill Score:</strong> {{ request.form.skillScore }}</p>
+                <p><strong>Personality Score:</strong> {{ request.form.personalityScore }}</p>
+                <p><strong>Recruitment Strategy:</strong> {{ request.form.recruitmentStrategy }}</p>
+                <hr>
+                <h3>Prediction:</h3>
+                <p>{{ prediction_text }}</p>
+            </div>
+            {% endif %}
+        </div>
     </div>
+
+    <script>
+        function updateAgeValue(value) {
+            document.getElementById('ageValue').textContent = value;
+        }
+    </script>
 </body>
 </html>
